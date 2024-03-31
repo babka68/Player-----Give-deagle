@@ -1,0 +1,39 @@
+#include <cstrike>
+#include <sdktools_functions>
+
+#pragma semicolon 1
+#pragma newdecls required
+
+public Plugin myinfo = 
+{
+	name = "Player --- Replace Glock On Deagle", 
+	author = "babka68", 
+	description = "При покупки glock, он будет заменён на deagle", 
+	version = "1.0", 
+	url = "https://vk.com/zakazserver68"
+};
+
+public Action CS_OnBuyCommand(int client, const char[] weapon)
+{
+	if (IsClientInGame(client) && IsPlayerAlive(client))
+	{
+		static int iEntity; iEntity = GetPlayerWeaponSlot(client, CS_SLOT_SECONDARY);
+		
+		if (iEntity > 0)
+		{
+			if (weapon[0] && !strcmp(weapon, "glock", false))
+			{
+				RemovePlayerItem(client, iEntity);
+				GivePlayerItem(client, "weapon_deagle", 0);
+				return Plugin_Handled;
+			}
+		}
+		
+		else
+		{
+			GivePlayerItem(client, "weapon_deagle", 0);
+			return Plugin_Handled;
+		}
+	}
+	return Plugin_Continue;
+} 
